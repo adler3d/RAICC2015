@@ -66,7 +66,7 @@ if(0)
   var cons=[{},{},{},{},{}];var c2id=s=>{var con=s.split("contest");if(con.length==1)return 0;return 0|con[1].split("/")[0];};
   for(url in pages){
     var maps=pages[url];url+=url.indexOf("page")<0?"/page/1":"";
-    var nick=url2user(url);
+    var nick=url2user(url+"/");
     if(nick!=user)continue;
     var c=c2id(url);
     if(!(c in cons))cons[c]={};
