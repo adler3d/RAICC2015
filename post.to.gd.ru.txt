@@ -1,4 +1,5 @@
-[spoiler="round 1"][img="http://russianaicup.ru/s/1455027419026/assets/application/img/field/logo-_fdoke.map.png"]     _fdoke = [3,3,0,0]
+[spoiler="round 1"]
+[img="http://russianaicup.ru/s/1455027419026/assets/application/img/field/logo-_fdoke.map.png"]     _fdoke = [3,3,0,0]
 [img="http://russianaicup.ru/s/1455027419026/assets/application/img/field/logo-_tyamgin.map.png"]     _tyamgin = [5,1,0,0]
 [img="http://russianaicup.ru/s/1455027419026/assets/application/img/field/logo-_ud1.map.png"]     _ud1 = [5,1,0,0]
 [img="http://russianaicup.ru/s/1455027419026/assets/application/img/field/logo-default.map.png"]     default = [2,1,2,2]
