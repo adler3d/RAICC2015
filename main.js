@@ -29,29 +29,45 @@ function f(e){
 function head(m){
   document.getElementById("ratingGraph").innerHTML="<pre><textarea style='width:99%' rows=15>"+JSON.stringify(m)+"</textarea></pre>";
 }
-var g_pages=window.localStorage.getItem("pages");
-var loc=document.location;
-var m={};
-for(var i=0;i<out.length;i++){
-  var ex=out[i];
-  var inc=ex[1].map(nick=>("Adler"==nick?1:0));
-  if(!(ex[0] in m))m[ex[0]]=[0,0,0,0];
-  var rec=m[ex[0]];
-  inc.forEach((e,i)=>rec[i]+=inc[i]);
-}
-var pages=JSON.parse(g_pages?g_pages:"{}");
-pages[loc]=m;
-g_pages=JSON.stringify(pages);
-window.localStorage.setItem("pages",g_pages);
-head(pages);
 
+var loc=document.location+"";
+
+if(loc.split("http://russianaicup.ru/profile/").length==2)
+{
+  var user=loc.split("http://russianaicup.ru/profile/")[1].split("/")[0];
+  var g_pages=window.localStorage.getItem("pages");
+  var loc=document.location;
+  var m={};
+  for(var i=0;i<out.length;i++){
+    var ex=out[i];
+    var inc=ex[1].map(nick=>(user==nick?1:0));
+    if(!(ex[0] in m))m[ex[0]]=[0,0,0,0];
+    var rec=m[ex[0]];
+    inc.forEach((e,i)=>rec[i]+=inc[i]);
+  }
+  var pages=JSON.parse(g_pages?g_pages:"{}");
+  pages[loc]=m;
+  g_pages=JSON.stringify(pages);
+  window.localStorage.setItem("pages",g_pages);
+  head(pages);
+}
 
 if(0)
 {
+  var url2user=url=>url.split("http://russianaicup.ru/profile/")[1].split("/")[0];;
+  var loc=document.location+"";
+  var user=url2user(loc);
+  var g_pages=window.localStorage.getItem("pages");
+  var pages=JSON.parse(g_pages?g_pages:"{}");
+  function to_ratingGraph(m){
+    document.getElementById("ratingGraph").innerHTML="<pre><textarea style='width:99%' rows=15>"+m+"</textarea></pre>";
+  }
   //
   var cons=[{},{},{},{},{}];var c2id=s=>{var con=s.split("contest");if(con.length==1)return 0;return 0|con[1].split("/")[0];};
   for(url in pages){
     var maps=pages[url];url+=url.indexOf("page")<0?"/page/1":"";
+    var nick=url2user(url);
+    if(nick!=user)continue;
     var c=c2id(url);
     if(!(c in cons))cons[c]={};
     var cur=cons[c];
@@ -61,40 +77,16 @@ if(0)
       maps[mn].forEach((e,i)=>rec[i]+=e);
     }
   }
-  var cur=cons[2];var out=[];
+  var cur=cons[c2id(loc)];
+  var keys=Object.keys(cur);
+  keys.sort();
+  var cur2=[];keys.forEach(mn=>cur2[mn]=cur[mn]);cur=cur2;
+  var out=[];
   for(mn in cur){
     out.push('[img="http://russianaicup.ru/s/1455027419026/assets/application/img/field/logo-'+mn+'.map.png"]     '+mn+' = '+JSON.stringify(cur[mn]));
   }
-  out.join("\n");
+  to_ratingGraph(out.join("\n"));
 }
-/*
-// copy-paste to console:
-function head(m){
-  document.getElementById("ratingGraph").innerHTML="<pre><textarea style='width:99%' rows=15>"+JSON.stringify(m)+"</textarea></pre>";
-}
-var g_pages=window.localStorage.getItem("pages");
-var loc=document.location;
-var pages=JSON.parse(g_pages?g_pages:"{}");
-head(pages);
-*/
-
-/*
-// copy-paste to console:
-head(cons[2]);
-//or
-head(cons[3]);
-*/
-
-/*
-// copy-paste to http://adler3d.github.io/test2013/:
-var cur=JSON.parse(POST['data']); //mean "var cur=cons[2];"
-var keys=Object.keys(cur);
-keys.sort();
-var cur2=[];keys.forEach(mn=>cur2[mn]=cur[mn]);cur=cur2;
-var out=[];
-for(mn in cur)out.push('[img="http://russianaicup.ru/s/1455027419026/assets/application/img/field/logo-'+mn+'.map.png"]     '+mn+' = '+JSON.stringify(cur[mn]));
-return out.join("\n");
-*/
 
 var r1="FDoKE,SKolotienko,DVS,ud1,tyamgin,Antmsu,Spumote,Romka,Mr.Smile,tvv766,Karkun,Leos,Firen95,santa324,Tehnar,reat,mixei4,Oxidize,OrickBy,Lev,alex_sh,Eleonora,azt-yur,MagAlex,jetblack,alberist,kirimedia,cha0ss,makarovks,zoldatoff,pr1k0l,serlis,Adler,Valdemar,AntonT,BeamOfLight,novich-OK,ruspartisan,lama,capizza,kudinov.mikhail,err502,MakArt,GreenTea,strobetm,vladster,andregc,Evgenykz,alkozel,Ixanezis,planB,ipris,bratva,Igorjan94,martem1995,white2302,longloaf,MrPingvi,Bolduin,4way,Alick,and0,wertrix,gepard21,RigFox,Stef,alladdin,Redstar,tairesh,advokat,komendart,PROGER,temak,zloy.,stem,oreshnik,bear,eigenein,SemikX,ferc,Volandpro,Sirius,Croohand,turbotankist,Eran,GeneralHaos,topspin,GeoGraf,Omelianenko,rekcahd,AlexeyN,ALEXks,Olegnv,Hohol,Poma,i-tikhonov,Wierus,FlaBla,anzu,perevodchik228,Wisp93,Skyfire,chis,ilya_,morozec,olsh,latikov,DeeCo,dbf,alevlaber,a.bazhin,narutofan,DistinGa,iakolzin,mustang,Aegro,gohard,FirstStorm,AdmiralShadow,Eugene713,jimor,dimir,GreenHorsy,miniJoker,danmerey,NanoBones,nmakarov,StarCuriosity,Olaf,Laer,SLavaLL,sildc,altais,cadavrorum,cheeser,znak4,aplayt,sslotin,griboedov,norpadon,mi5,P_YegreS_P,udwarf,SDil,Anisimov,Levatol,psinetron,Big_Z,Astw,aBv,ReMaker,Headhunter,Serik,Alkev,fair_enough,IlyaSM,271828182845904,wide.wrd,Alexander_USU,zomac,Yura_Sultonov,kirdark,ManGeorge,kvld,Impuls,Vadimyan,bpa,PolyProgrammist,nikolaev,Vaden,Sominus,popolit,dobord,Zimbabwe23,1337,JlaHceJloT,zinya,Mr_Alone,Sneer,BurningNegr,YaguarVL,ludkich,Spartan,MaxPylypovych,Kannagi,YukkaSarasti,Rety,fitialovks,cahq,jacka7,turbodestroyer,vvv1559,fu-tyan,Psirex,Foxager,clamoris,ProGGG,Execrable,AndreySiunov,tws,Ancient_mage,vladimir,Fame,anon410,qaa12,Rempler,vedas,akacoder,BudAlNik,FOGY,RegressCheck,evarand,tjden,byserge,AlexBoyko,Zanoza,KostinOleg,RKB,alex700,snw1,Jatana,Rensa,Woogy,__SPIRIT___,RusGIS,optimist,ArturRush,Genaloid,anton_sh,Siont,sergeif,iSperia,Varlamov_AD,Rybych,Melron_Torkin,GSerge,logical8,inventor95,alex270295,alex.tsitsura,Vark,moden,Arturian,cjey,zn-soft,alexions,shpongle,efiminem,belyjz,ignorer,outzzz,Daramant,DeltA,ajto,shek_shek,Bogotoff,mike_4d,i.surmin,can_mftac,Ant,ykaland,GoodKid,theShade,glebasikmail.ru,Chestnut,mopdobopot,AleksBannikov,Kotenko,AndruKrug,axiskgn,972,vtyulb,Enavik,jylilov,Kamilot,Flash2048,TongoHiti,eaglegor,JayTord,slava,furyroad,grapefroot,En_taro_adun,VLJ,xblondee,Khao,bearf,Finist,einster,sleipnir,Gladiator_Y,Redkiy,bucash,Gorchay,tatyanka66693,ixvil,bait125,RV173,alex591,Mihailburn,FeniksEM,prohor33,Serpent,mrlewap,Lavrentyus,Daneel,erwinnv,westside,AndreaB330,Alcofest,aga.deonix,phts,Enchante_,MesaR,Apocalypse,MaXpaT,denisovlev,SparseMind,Alexyz,quckly,kislas,Hacky,Kerk_Dovan,dimonesto,Fep,snow_shadaw,Fiz,_famafka,Gelon,guilder1333,burning.mustard,DiCom,vadimvolk,velorias,shym98,Flutter,alexanderk23,ekruten,nilzavatar,Diversus,Owl,DeZi,Deadundead,Evernight,yorik,Gerikon,mr.newman,Evilnef,MerliX,Signer,pavel-kv,Magnat,NumberOne,egormkn,sushakov,Cashey,nakilon,Scherbakov,romans02,Guarrawa,asfir,pssam,ubermuschi,Drewandrew,Mashiro,KungA,Liaksiejka,Bastoph,mf-side,Mystifier,karovka,saidyn,dmitrii,subboo,sword,rewin,xmanatee,iona,Rumbo,paul_ik,k0rzun1n,EvgeniyZh,mGx,Sanders,Ilya32167,skyramp,sergileon,beaver95,lub_rus,vasylysk,Trinidad,lammi04,Damai,blow05,DimonK,biwboris,artemoniks,JesusPlusPlus,sandr,A13x3y,oparin,fowler,uppi,imsohate,rahimov,icar,Evander,dsp,Minhir,fragment,Kofko,spiker,Mortum5,yozh-tema,penguins,xTANATOSx,Scrblmer,alexei.khatingm,AndrewSt,juvus,Ivnst,kokorins,AntonK,schibir,IvanSchro,alisktl,Antik,ulul,firsaalex,Serafim1st,Bond,lockerbie,EKorobov,kirias,Wsl_F,Keniamin,mrv,ynblpb,cherry-girl,skyfox,petuhovskiy,bug_maker,TurboYoda,brick_btv,Papirosnik,artem.votincev,freebsn,zaoozka,antonchechulin,DevKirill,gatal,LaFut,timer00,GARiK_Carrot,ADze,ilux,StepetS,PretzelBot,Sapphire,antoracle,Andrean4ik,Virgin_Worst,emreu30,Mhyhr,Topakhok,VAV,gli,kopisovaas,texasky,Svinokol,SparkLone,grandrust,ReSY,kostochkin,Master_IVA,aabzac,Plumer,Drentul,TasmanianDevil,13human,xl0e,Scorp,eygz,xtr3m,bamx23,rschnz,NoTimeToWait,a333,valertron,innok96,Madball,superbeller,dkotsur,ScratTver,rumter,danilf16,Morgan,Tikvik,SerP,Morozko,kna.rus,a.oryol,bullz_i,maser,nike10b,waterstream,modemaizer,Scarlet,greg95,buggy-wuggy,rebelraven,Gleb1she,SeriousDen,Kladzey,NutZ,Iriskinn,Inflight,sarchon,amp,morozyan,IMost,M-Mad,Amadeus,kismir,unq,K.Yolshin,lensherr,lalala,WontStopMe,soon,maskitnew,NereWARin,runn3r,Tarolrr,dmitrievkv,Zander,Gvoin,NightStar,dr.12,Vadimyan2,mikhan808,X-Ander,BarsukAlexey,dotBalance,kobiaka,marchuk_a,...............,victor-cr,aides,Mr.Lol,avolchek,hilmekrhu,vasste,Fireworks,zeithaste,Sfaurat,RudyErudyta,azapsh,Wolfit,weterok_ai,Artall64,k2s,crazynx,EnemyOfGiraffe,StrelokCj,Fairhawk,karloid,diniska,cojuer,Piterskuy,ruswizard,undo,thisleonard,myduomilia,ad-eto_drugiye,DmitrySamoyenko,jMind,Moonraker,xacker,pomoshnik,RinesThaix,Vergiliy,geisterkirche,0re1,whoa,doodoocaca,re9ulus,SanDi,Gassa,girakon,anarki,MutaStack,artyom-256,starjedy,irbis,crain,AlexBobkov,Vadimyan3,ave99,terdened,Andrew_Makar,fobbos08,Barricadenick,petruchcho,cups_19280,fastec,MichaelSL,Bones,asdfghjkley,maylat,i_v_a,slavam2605,navispb,movchan74,TAleks,wowanama,Nekrolm,alchemist23,HarryBurns,Computer,didoomaster,245790,lexer,Greycardinalrus,Baz93,eXponenta,sapozhkov,0xdde,woblavobla,shpuljka,AlexzundeR,Lord_Grey,wyndrick,Triman,Programmer_86,kas4enit,Apollon76,GRaAL,KLM,nsk.demin,ips,u1tr0n,SteelRaven,AG-Volk,MadridianFox,anton.schelokov,vokitsok,svrVSPU,Supervoid,JustAMan,lokofan46,marserMD,blizznets,PhannGor,indebox,denisbalyko,_JG_,Daeh0f,MrRandomizer,Azarn,codin4fun,tegArt,Dan555,KeKin,_dd210,vovanz123,T-Rex,striker,Monzarh,ya_ilya,Volv,olegaaaaa,bypeso,RomanStar,lebed.salavat,fractus,BlackCat,afansky,flgdev,Vaulverin,manaevruslan,Naduxa,hahocok,SCRIMERS,HeyKappaKappa,MAD_DEL,mgukov,jne0xff,antoliy.aksenov,__ivan__,aryl11,momoadept,2DKot,aos,badadin,mc.lion,ReshetnikovIvan,pset88,jetzack,cups_23644,Laur_lct,dethariel,arrr,gultai4uk_r,Bogdand,MsNatali,agdk26,AudiTT,cups_19463,Nepobedimych,KhaustovPavel,balta2ar,thevlad,MariaIzobava,snikes,zsmartcat,merzgling,zerlag,s0n1c,deftone,Drakosha,jazzim82,Recar,RomaVT,lanseg,MyrZiK,nightrain,Toxoed,Jonnesch73,CaptainFreedom,MightyDwarf,VioletShadow,eexaxa,nixoid,NutsHell,Denis1997,phpshko,raTaHoa,DREC,DukeKan,artinn,hcpl,ine,vitsum,dasha_bazila,Yarosurabu,AlexDo,Hamster,Raventus,llotar,Shpinderkblw,Eretic,IFighter,Shasd_ds,tarsier,Liza,jenyanorilsk,andrey11,sovaalek,xgetc,Xapac,a.korneev,diuk,EvAn,denyWhite_,Let_It_Rain,weer,theghost777,temagi,Alozavr,wifyer,panyav1n,Galtran,GlebR,Beresta,MrShift,pesua,Shmaiser,olegshatov,Proletariat,theacetoace,spYder,4eyes,qwesqwed,stosloff,Malen11,Actium,pborisov,Ni2c2k,sahchos,rubkaarchi,klisha,wasil,GenNa,r00tman,HiVaccessdenied,Fulborg,Rebel,vovo4ka,GSazheniuk,podliy166,LeeT,ardt2,sarge_Brain,Pol_uha,coriollon_42,GoToCoding,LARSIK,Lucky,Vasily89,Schemtschik,Timmy,Nike,Hatter,yobaneo,bind,Trit0n,Pe4enie,goto03,kvasovdmitry,Nevermind,CitrusMetal,rngvva,Deaz,m4shell,iovorobiev,Applemoon,Dxoid,guru,Greg,Puchegusa,justgecko,ak79,ShikaSD,Yermakov,jnn,Maks95Ivanovo,TSvitalik,Ruslion,Shift,Helgi17,eeexception,Fexolm,wasiwih,show,missingdays,anna_moshkina,cups_17467,SoLRoN,ATwice291,MadKnight,margo,gr1ev0us,Kirundel,Irkenny,smbddd,SizeM,KP0H,GLAUBEROV,Ilnaz1994,rulsan,Corwin,cNoNim,xakepob,balyberdin,annaalkh,dsp25no,Simba,NoraArendt,Fram,workres,prizraksarvar,MaximoN,rekzi,chaachii,HG89,Andrey2888,speedflyer,MonteCristo,zhuk2303,Sancho-Pancho,Dispater,andygluk,mibiha,Hromosom,Lyane,invention,astepanov,kirillxcore,Mang,dboev,Grino,Bios,phlegmatik,shturo_mikhail,freeRunner,serg7c,igabaydulin,Hardept";
 
